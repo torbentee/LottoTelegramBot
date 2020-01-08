@@ -14,7 +14,7 @@ import math
 from enum import Enum
 
 credentials = {}
-db_file = 'user.db'
+db_file = 'user'
 
 ####################
 # Helper functions
@@ -95,7 +95,7 @@ def eurojackpot(update, context):
 
     newentry = {
         'eurojackpot_bottom_bound': bound,
-        'lastmessage': datetime(1, 1, 1)
+        'euro_lastmessage': datetime(1, 1, 1)
     }
     update_db(update.effective_chat.id, newentry)
 
@@ -118,16 +118,20 @@ def lotto(update, context):
 
     newentry = {
         'lottojackpot_bottom_bound': bound,
-        'lastmessage': datetime(1, 1, 1)
+        'lotto_lastmessage': datetime(1, 1, 1)
     }
     update_db(update.effective_chat.id, newentry)
 
 
 def poll_eurojackpot(context):
     logging.info("polling")
-    if not os.path.exists(db_file):
+    import dbm
+    try:
+        dbm.open(db_file, flag='r')
+    except dbm.error:
         logging.warning("database file %s does not exist", db_file)
         return
+
 
     database = {}
     with shelve.open(db_file, flag='r', writeback=False) as db:
@@ -138,28 +142,39 @@ def poll_eurojackpot(context):
         bound_euro = database[key].get('eurojackpot_bottom_bound') or math.inf
         bound_lotto = database[key].get(
             'lottojackpot_bottom_bound') or math.inf
-        lastmessage = database[key].get('lastmessage')
+        euro_lastmessage = database[key].get('euro_lastmessage')
+        lotto_lastmessage = database[key].get('lotto_lastmessage')
         jackpot_euro = jackpots[0][0]
         jackpot_lotto = jackpots[1][0]
+        drawdate_euro = datetime.fromtimestamp(jackpots[0][1] / 1000.0)
+        drawdate_lotto = datetime.fromtimestamp(jackpots[1][1] / 1000.0)
+
         logging.info(
             {
-                "bound": bound_euro,
+                "bound_euro": bound_euro,
+                "bound_lotto": bound_lotto,
                 "eurojackpot": jackpot_euro,
                 "lottojackpot": jackpot_euro,
-                "lastmessage": lastmessage
+                "euro_lastmessage": euro_lastmessage,
+                "lotto_lastmessage": lotto_lastmessage,
+                "drawdate_euro": drawdate_euro,
+                "drawdate_lotto": drawdate_lotto
             }
         )
-        if (bound_euro <= jackpot_euro):
-            # and
-            #         (lastmessage == None or
-            #          lastmessage < drawDate + timedelta(days=1))):
+        if (euro_lastmessage == None or
+                euro_lastmessage < drawdate_euro + timedelta(days=1)) and (bound_euro <= jackpot_euro):
             newentry = {
-                'lastmessage': datetime.now()
+                'euro_lastmessage': datetime.now()
             }
             update_db(key, newentry)
             context.bot.send_message(chat_id=key,
                                      text="The EUROJACKPOT is at {} mil. €".format(jackpot_euro))
-        if (bound_lotto <= jackpot_lotto):
+        if (lotto_lastmessage == None or
+                lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and (bound_lotto <= jackpot_lotto):
+            newentry = {
+                'lotto_lastmessage': datetime.now()
+            }
+            update_db(key, newentry)
             context.bot.send_message(chat_id=key,
                                      text="The LOTTOJACKPOT is at {} mil. €".format(jackpot_lotto))
 
