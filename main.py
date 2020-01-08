@@ -170,7 +170,16 @@ def help(update, context):
 /help - show this help
 /eurojackpot -
 /lottojackpot -
+/settings -
 """)
+
+def settings(update, context):
+    reply = ""
+    with shelve.open(db_file, flag='r', writeback=False) as db:
+        reply = db.get(str(update.effective_chat.id))
+
+    logging.info(str(reply))
+    update.message.reply_text(str(reply))
 
 ####################
 # Main
@@ -207,6 +216,8 @@ def main(args=None):
     dispatcher.add_handler(lotto_handler)
     help_handler = CommandHandler('help', help)
     dispatcher.add_handler(help_handler)
+    settings_hanlder = CommandHandler('settings', settings)
+    dispatcher.add_handler(settings_hanlder)
 
     logging.info("Start polling")
     updater.start_polling()
