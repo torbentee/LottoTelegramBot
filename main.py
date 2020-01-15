@@ -154,7 +154,7 @@ def poll_eurojackpot(context):
                 "bound_euro": bound_euro,
                 "bound_lotto": bound_lotto,
                 "eurojackpot": jackpot_euro,
-                "lottojackpot": jackpot_euro,
+                "lottojackpot": jackpot_lotto,
                 "euro_lastmessage": euro_lastmessage,
                 "lotto_lastmessage": lotto_lastmessage,
                 "drawdate_euro": drawdate_euro,
@@ -169,6 +169,13 @@ def poll_eurojackpot(context):
             update_db(key, newentry)
             context.bot.send_message(chat_id=key,
                                      text="The EUROJACKPOT is at {} mil. €".format(jackpot_euro))
+            debug = {
+                'euro_lastmessage': lotto_lastmessage,
+                'drawdate_euro': drawdate_euro,
+                'bound_euro': bound_euro,
+                'jackpot_euro': jackpot_euro
+            }
+            logging.info(debug)
         if (lotto_lastmessage == None or
                 lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and (bound_lotto <= jackpot_lotto):
             newentry = {
