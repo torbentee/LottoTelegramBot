@@ -216,13 +216,16 @@ def main(args=None):
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-    with open('credentials.json', 'r') as infile:
-        logging.info("Reading credentials.json …")
-        credentials = json.load(infile)
-        logging.info("Done reading credentials.json")
+    credentials = {
+         'telegram_token': os.environ.get('telegram_token')
+    }
+    #with open('credentials.json', 'r') as infile:
+    #    logging.info("Reading credentials.json …")
+    #    credentials = json.load(infile)
+    #    logging.info("Done reading credentials.json")
 
     logging.info("Startup …")
-    updater = Updater(token=credentials['telegram-bot'], use_context=True)
+    updater = Updater(token=credentials['telegram_token'], use_context=True)
     dispatcher = updater.dispatcher
     logging.info("Ready!")
 
