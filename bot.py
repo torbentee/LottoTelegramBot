@@ -199,7 +199,7 @@ def settings(update, context):
         reply = db.get(str(update.effective_chat.id))
 
     logging.info(str(reply))
-    update.message.reply_text(json.dump(str(reply)))
+    update.message.reply_text(json.dumps(str(reply)))
 
 ####################
 # Main
