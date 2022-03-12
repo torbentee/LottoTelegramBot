@@ -11,6 +11,7 @@ import copy
 import os
 import math
 from enum import Enum
+import json
 
 credentials = {}
 db_file = 'user'
@@ -198,7 +199,7 @@ def settings(update, context):
         reply = db.get(str(update.effective_chat.id))
 
     logging.info(str(reply))
-    update.message.reply_text(str(reply))
+    update.message.reply_text(json.dump(str(reply)))
 
 ####################
 # Main
