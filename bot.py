@@ -5,7 +5,6 @@ import shelve
 from telegram.ext import CommandHandler
 from telegram import ReplyKeyboardMarkup
 import requests
-import json
 from datetime import datetime, timedelta
 import datetime as d
 import copy
@@ -36,7 +35,7 @@ def update_db(chatid, newentries):
         logging.info(db[idasstring])
 
 
-def request_current_jackpot(species = None):
+def request_current_jackpot(species=None):
     url = ""
     if (species == Species.EUROJACKPOT):
         url = "https://www.lotto.de/api/stats/entities.eurojackpot/last"
@@ -50,9 +49,9 @@ def request_current_jackpot(species = None):
         return result
 
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
-    response = requests.get(
-        url, headers=headers)
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
+    }
+    response = requests.get(url, headers=headers)
     data = response.json()
 
     return (data['jackpotNew'], data['drawDate'])
@@ -132,7 +131,6 @@ def poll_eurojackpot(context):
         logging.warning("database file %s does not exist", db_file)
         return
 
-
     database = {}
     with shelve.open(db_file, flag='r', writeback=False) as db:
         database = copy.deepcopy(dict(db))
@@ -161,8 +159,7 @@ def poll_eurojackpot(context):
                 "drawdate_lotto": drawdate_lotto
             }
         )
-        if (euro_lastmessage == None or
-                euro_lastmessage < drawdate_euro + timedelta(days=1)) and (bound_euro <= jackpot_euro):
+        if (euro_lastmessage == None or euro_lastmessage < drawdate_euro + timedelta(days=1)) and (bound_euro <= jackpot_euro):
             newentry = {
                 'euro_lastmessage': datetime.now()
             }
@@ -176,8 +173,7 @@ def poll_eurojackpot(context):
                 'jackpot_euro': jackpot_euro
             }
             logging.info(debug)
-        if (lotto_lastmessage == None or
-                lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and (bound_lotto <= jackpot_lotto):
+        if (lotto_lastmessage == None or lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and (bound_lotto <= jackpot_lotto):
             newentry = {
                 'lotto_lastmessage': datetime.now()
             }
@@ -194,6 +190,7 @@ def help(update, context):
 /lottojackpot -
 /settings -
 """)
+
 
 def settings(update, context):
     reply = ""
@@ -219,10 +216,6 @@ def main(args=None):
     credentials = {
          'telegram_token': os.environ.get('telegram_token')
     }
-    #with open('credentials.json', 'r') as infile:
-    #    logging.info("Reading credentials.json …")
-    #    credentials = json.load(infile)
-    #    logging.info("Done reading credentials.json")
 
     logging.info("Startup …")
     updater = Updater(token=credentials['telegram_token'], use_context=True)
