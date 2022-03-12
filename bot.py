@@ -214,7 +214,7 @@ def main(args=None):
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     credentials = {
-         'telegram_token': os.environ.get('telegram_token')
+        'telegram_token': os.environ.get('telegram_token')
     }
 
     logging.info("Startup …")
@@ -239,6 +239,7 @@ def main(args=None):
 
     logging.info("Start polling")
     updater.start_polling()
+    updater.idle()
 
 
 if __name__ == "__main__":
