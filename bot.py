@@ -194,7 +194,7 @@ def help(update, context):
 
 def settings(update, context):
     reply = ""
-    with shelve.open(db_file, flag='r', writeback=False) as db:
+    with shelve.open(db_file, flag='c', writeback=False) as db:
         reply = db.get(str(update.effective_chat.id))
 
     logging.info(str(reply))
