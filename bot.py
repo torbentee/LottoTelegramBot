@@ -167,7 +167,7 @@ def poll_eurojackpot(context):
             context.bot.send_message(chat_id=key,
                                      text="The EUROJACKPOT is at {} mil. €".format(jackpot_euro))
             debug = {
-                'euro_lastmessage': lotto_lastmessage,
+                'euro_lastmessage': euro_lastmessage,
                 'drawdate_euro': drawdate_euro,
                 'bound_euro': bound_euro,
                 'jackpot_euro': jackpot_euro
