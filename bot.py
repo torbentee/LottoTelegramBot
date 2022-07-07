@@ -158,7 +158,7 @@ def poll_eurojackpot(context):
                 "drawdate_lotto": drawdate_lotto
             }
         )
-        if (euro_lastmessage == None or euro_lastmessage < drawdate_euro + timedelta(days=1)) and (bound_euro <= jackpot_euro):
+        if (euro_lastmessage == None or euro_lastmessage < drawdate_euro + timedelta(days=1)) and jackpot_euro != None and (bound_euro <= jackpot_euro):
             newentry = {
                 'euro_lastmessage': datetime.now()
             }
@@ -172,7 +172,8 @@ def poll_eurojackpot(context):
                 'jackpot_euro': jackpot_euro
             }
             logging.info(debug)
-        if (lotto_lastmessage == None or lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and (bound_lotto <= jackpot_lotto):
+
+        if (lotto_lastmessage == None or lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and jackpot_lotto != None and (bound_lotto <= jackpot_lotto):
             newentry = {
                 'lotto_lastmessage': datetime.now()
             }
