@@ -1,17 +1,15 @@
-import sys
-from telegram.ext import Updater
-import logging
-import shelve
-from telegram.ext import CommandHandler
-from telegram import ReplyKeyboardMarkup
-import requests
-from datetime import datetime, timedelta
-import datetime as d
 import copy
-import os
-import math
-from enum import Enum
 import json
+import logging
+import math
+import os
+import shelve
+import sys
+from datetime import datetime, timedelta
+from enum import Enum
+
+import requests
+from telegram.ext import CommandHandler, Updater
 
 credentials = {}
 db_file = 'data/user.db'
@@ -160,7 +158,7 @@ def poll_eurojackpot(context):
                 "drawdate_lotto": drawdate_lotto
             }
         )
-        if (euro_lastmessage == None or euro_lastmessage < drawdate_euro + timedelta(days=1)) and (bound_euro <= jackpot_euro):
+        if (euro_lastmessage == None or euro_lastmessage < drawdate_euro + timedelta(days=1)) and jackpot_euro != None and (bound_euro <= jackpot_euro):
             newentry = {
                 'euro_lastmessage': datetime.now()
             }
@@ -174,7 +172,8 @@ def poll_eurojackpot(context):
                 'jackpot_euro': jackpot_euro
             }
             logging.info(debug)
-        if (lotto_lastmessage == None or lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and (bound_lotto <= jackpot_lotto):
+
+        if (lotto_lastmessage == None or lotto_lastmessage < drawdate_lotto + timedelta(days=1)) and jackpot_lotto != None and (bound_lotto <= jackpot_lotto):
             newentry = {
                 'lotto_lastmessage': datetime.now()
             }
