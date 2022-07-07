@@ -1,17 +1,15 @@
-import sys
-from telegram.ext import Updater
-import logging
-import shelve
-from telegram.ext import CommandHandler
-from telegram import ReplyKeyboardMarkup
-import requests
-from datetime import datetime, timedelta
-import datetime as d
 import copy
-import os
-import math
-from enum import Enum
 import json
+import logging
+import math
+import os
+import shelve
+import sys
+from datetime import datetime, timedelta
+from enum import Enum
+
+import requests
+from telegram.ext import CommandHandler, Updater
 
 credentials = {}
 db_file = 'user'
