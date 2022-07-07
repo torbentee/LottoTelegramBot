@@ -14,7 +14,7 @@ from enum import Enum
 import json
 
 credentials = {}
-db_file = 'user'
+db_file = 'data/user.db'
 
 ####################
 # Helper functions
@@ -199,7 +199,7 @@ def settings(update, context):
         reply = db.get(str(update.effective_chat.id))
 
     logging.info(str(reply))
-    update.message.reply_text(json.dump(str(reply)))
+    update.message.reply_text(json.dumps(str(reply)))
 
 ####################
 # Main
