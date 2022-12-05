@@ -200,6 +200,10 @@ def settings(update, context):
     logging.info(str(reply))
     update.message.reply_text(json.dumps(str(reply)))
 
+
+def error_callback(update, context):
+    logging.warning('Update "%s" caused error "%s"', update, context.error)
+
 ####################
 # Main
 ####################
@@ -236,6 +240,8 @@ def main(args=None):
     dispatcher.add_handler(help_handler)
     settings_hanlder = CommandHandler('settings', settings)
     dispatcher.add_handler(settings_hanlder)
+
+    dispatcher.add_error_handler(error_callback)
 
     logging.info("Start polling")
     updater.start_polling()
