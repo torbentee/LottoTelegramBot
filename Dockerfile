@@ -1,7 +1,7 @@
 FROM python:3.12-alpine as base
 
 FROM base as builder
-RUN apk add --no-cache build-base make libressl-dev musl-dev libffi-dev
+#RUN apk add --no-cache build-base make libressl-dev musl-dev libffi-dev
 
 RUN python -m venv /opt/venv
 # Make sure we use the virtualenv:
