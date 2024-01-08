@@ -3,8 +3,7 @@ import os
 import sys
 from datetime import datetime
 
-from telegram.ext import Application, CommandHandler, Updater
-from telegram.constants import UpdateType
+from telegram.ext import Application, CommandHandler
 
 from helper import update_db,request_current_jackpot,poll_eurojackpot,Species,getFullConfig
 
@@ -90,7 +89,6 @@ async def error_callback(update, context):
 # Main
 ####################
 
-
 def main(args=None):
     """The main routine."""
     if args is None:
@@ -110,15 +108,11 @@ def main(args=None):
     job_queue = application.job_queue
     job_queue.run_repeating(poll_eurojackpot, interval=1800, first=0)
 
-    start_handler = CommandHandler('start', start)
-    application.add_handler(start_handler)
-    eurojackpot_handler = CommandHandler('eurojackpot', eurojackpot)
-    application.add_handler(eurojackpot_handler)
-    lotto_handler = CommandHandler('lottojackpot', lotto)
-    application.add_handler(lotto_handler)
+    application.add_handler(CommandHandler('start', start))
+    application.add_handler(CommandHandler('eurojackpot', eurojackpot))
+    application.add_handler(CommandHandler('lottojackpot', lotto))
     application.add_handler(CommandHandler('help',helpHandler))
-    settings_hanlder = CommandHandler('settings', settings)
-    application.add_handler(settings_hanlder)
+    application.add_handler(CommandHandler('settings', settings))
 
     application.add_error_handler(error_callback)
 
