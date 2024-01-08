@@ -113,8 +113,9 @@ def poll_eurojackpot(context):
 
 
 def getFullConfig(chat_id):
-     result = ""
-     with shelve.open(db_file, flag='c', writeback=False) as db:
+    result = ""
+    with shelve.open(db_file, flag='c', writeback=False) as db:
         result = db.get(str(chat_id))
-    
-     json.dumps(str(result))
+
+    logging.info(result)
+    return json.dumps(str(result))

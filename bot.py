@@ -3,28 +3,29 @@ import os
 import sys
 from datetime import datetime
 
-from telegram.ext import CommandHandler, Updater
+from telegram.ext import Application, CommandHandler, Updater
+from telegram.constants import UpdateType
 
 from helper import update_db,request_current_jackpot,poll_eurojackpot,Species,getFullConfig
 
 credentials = {}
 
-def start(update, context):
+async def start(update, context):
     logging.info(update.effective_chat.id)
     newentry = {
         'isactive': True
     }
     update_db(update.effective_chat.id, newentry)
-    update.message.reply_text(
+    await update.message.reply_text(
         "Ok! Let's get a notification for _Eurojackpot_ /help")
 
 
-def eurojackpot(update, context):
+async def eurojackpot(update, context):
     logging.info(update.effective_chat.id)
 
     if (len(context.args) == 0):
         jackpot, drawDate = request_current_jackpot(Species.EUROJACKPOT)
-        update.message.reply_text(
+        await update.message.reply_text(
             "Current eurojackpot: {} mil. €".format(jackpot))
         return
 
@@ -32,7 +33,7 @@ def eurojackpot(update, context):
     bound = int(context.args[0])
 
     user_says = " " + str(bound)
-    update.message.reply_text(
+    await update.message.reply_text(
         "You will be notified if the eurojackpot is above: " + user_says + " mil. €")
 
     newentry = {
@@ -42,12 +43,12 @@ def eurojackpot(update, context):
     update_db(update.effective_chat.id, newentry)
 
 
-def lotto(update, context):
+async def lotto(update, context):
     logging.info(update.effective_chat.id)
 
     if (len(context.args) == 0):
         jackpot, drawDate = request_current_jackpot(Species.LOTTO)
-        update.message.reply_text(
+        await update.message.reply_text(
             "Current lotto jackpot: {} mil. €".format(jackpot))
         return
 
@@ -55,7 +56,7 @@ def lotto(update, context):
     bound = int(context.args[0])
 
     user_says = " " + str(bound)
-    update.message.reply_text(
+    await update.message.reply_text(
         "You will be notified if the lotto jackpot is above: " + user_says + " mil. €")
 
     newentry = {
@@ -65,8 +66,8 @@ def lotto(update, context):
     update_db(update.effective_chat.id, newentry)
 
 
-def help(update, context):
-    update.message.reply_text("""
+async def helpHandler(update, context):
+    await update.message.reply_text("""
     /start - register to use the Lotto News Bot
 /help - show this help
 /eurojackpot -
@@ -75,14 +76,14 @@ def help(update, context):
 """)
 
 
-def settings(update, context):
+async def settings(update, context):
     reply = getFullConfig(update.effective_chat.id)
 
     logging.info(reply)
-    update.message.reply_text(reply)
+    await update.message.reply_text(reply)
 
 
-def error_callback(update, context):
+async def error_callback(update, context):
     logging.warning('Update "%s" caused error "%s"', update, context.error)
 
 ####################
@@ -103,30 +104,27 @@ def main(args=None):
     }
 
     logging.info("Startup …")
-    updater = Updater(token=credentials['telegram_token'], use_context=True)
-    dispatcher = updater.dispatcher
+    application = Application.builder().token(credentials['telegram_token']).build()
     logging.info("Ready!")
 
-    j = dispatcher.job_queue
-
-    j.run_repeating(poll_eurojackpot, interval=1800, first=0)
+    job_queue = application.job_queue
+    job_queue.run_repeating(poll_eurojackpot, interval=1800, first=0)
 
     start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+    application.add_handler(start_handler)
     eurojackpot_handler = CommandHandler('eurojackpot', eurojackpot)
-    dispatcher.add_handler(eurojackpot_handler)
+    application.add_handler(eurojackpot_handler)
     lotto_handler = CommandHandler('lottojackpot', lotto)
-    dispatcher.add_handler(lotto_handler)
-    help_handler = CommandHandler('help', help)
-    dispatcher.add_handler(help_handler)
+    application.add_handler(lotto_handler)
+    application.add_handler(CommandHandler('help',helpHandler))
     settings_hanlder = CommandHandler('settings', settings)
-    dispatcher.add_handler(settings_hanlder)
+    application.add_handler(settings_hanlder)
 
-    dispatcher.add_error_handler(error_callback)
+    application.add_error_handler(error_callback)
 
     logging.info("Start polling")
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
+    application.idle()
 
 
 if __name__ == "__main__":
