@@ -1,4 +1,4 @@
-FROM python:3.11-alpine as base
+FROM python:3.12-alpine as base
 
 FROM base as builder
 RUN apk add --no-cache build-base make libressl-dev musl-dev libffi-dev
