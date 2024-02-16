@@ -7,7 +7,7 @@ import math
 import json
 from datetime import datetime, timedelta
 
-db_file = 'data/user.db'
+db_file = 'data/user'
 
 def update_db(chatid, newentries):
     idasstring = str(chatid)
