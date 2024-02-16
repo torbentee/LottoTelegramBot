@@ -60,9 +60,7 @@ def poll_eurojackpot(context):
         logging.warning("database file %s does not exist", db_file)
         return
 
-    database = {}
-    with shelve.open(db_file, flag='r', writeback=False) as db:
-        database = copy.deepcopy(dict(db))
+    database = shelve.open(db_file, flag='r', writeback=False)
     jackpots = request_current_jackpot()
 
     for key in database:
