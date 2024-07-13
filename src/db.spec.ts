@@ -87,6 +87,13 @@ test("getUsersWhoShouldBeNotified", () => {
   ];
 
   expect(getUsersWhoShouldBeNotified(20, "eurojackpot", data)).toStrictEqual([
+    {
+      euroJackpotLastmessage: 10,
+      eurojackpotBottomBound: 10,
+      id: 123,
+      lottoJackpotLastmessage: 3,
+      timestamp: 915148920000,
+    },
     { id: 456, timestamp: new Date().getTime() },
     {
       id: 999,

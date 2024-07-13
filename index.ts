@@ -7,7 +7,8 @@ init();
 CronJob.from({
   cronTime: "* * * * *",
   onTick: () => {
-    Promise.all([pollEurojackpot(), pollLottojackpot()]);
+    pollEurojackpot();
+    pollLottojackpot();
   },
   start: true,
   timeZone: "Europe/Berlin",
