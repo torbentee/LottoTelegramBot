@@ -17,7 +17,7 @@ type Database = { values: Values; global: Global };
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-const db = await JSONFilePreset<Database>("db.json", {
+const db = await JSONFilePreset<Database>("db/db.json", {
   values: [],
   global: { eurojackpot: { lastJackpot: 0 }, lottojackpot: { lastJackpot: 0 } },
 });

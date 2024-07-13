@@ -16,12 +16,10 @@ COPY . .
 
 ENV NODE_ENV=production
 RUN bun test
-RUN bun run build
+RUN bun build --compile --minify --sourcemap index.ts --outfile myapp
 
 FROM base AS release
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/index.ts .
-COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=prerelease /usr/src/app/myapp .
 
 USER bun
-ENTRYPOINT [ "bun", "run", "index.ts" ]
+ENTRYPOINT [ "./myapp" ]
