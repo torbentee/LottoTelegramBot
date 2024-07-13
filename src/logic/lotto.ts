@@ -17,7 +17,7 @@ export async function pollLottojackpot() {
   console.log("Poll Lottojackpot");
   const response = await fetchLottoJackpot();
   const jackpot = response.jackpotNew;
-  if (!jackpot) {
+  if (jackpot === null) {
     return null;
   }
 

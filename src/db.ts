@@ -85,10 +85,10 @@ export function getUsersWhoShouldBeNotified(
   return getLatestState(database)
     .filter((value) => {
       const a = map[type];
-      if (!a) return true;
+      if (a === undefined) return true;
       const b = value[map[type]];
-      if (!b) return true;
-      return b >= jackpot;
+      if (b === undefined) return true;
+      return b <= jackpot;
     })
     .filter(filterOfTime);
 }
