@@ -44,6 +44,9 @@ export function init() {
       return ctx.react("👍");
     } else {
       const response = await fetchEuroJackpot();
+      if (!response.jackpotNew) {
+        return ctx.reply("Currently no information available");
+      }
       const drawDate = new Date(response.drawDate).toDateString();
       const jackpot = response.jackpotNew;
       return ctx.reply(toBeautyString({ jackpot, drawDate }));
@@ -63,6 +66,9 @@ export function init() {
       return ctx.react("👍");
     } else {
       const response = await fetchLottoJackpot();
+      if (!response.jackpotNew) {
+        return ctx.reply("Currently no information available");
+      }
       const drawDate = new Date(response.drawDate).toDateString();
       const jackpot = response.jackpotNew;
       return ctx.reply(toBeautyString({ jackpot, drawDate }));
