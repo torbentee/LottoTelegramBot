@@ -106,7 +106,7 @@ export function getLatestState(db: Values) {
           ...cur,
         },
       };
-    }, {});
+    }, {} as { [key: number]: ArrayElement<Values> });
   return Object.values(intermediateObject) as Values;
 }
 

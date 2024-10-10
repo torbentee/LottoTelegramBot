@@ -70,12 +70,18 @@ test("getUsersWhoShouldBeNotified", () => {
       id: 123,
       timestamp: new Date().getTime(),
       euroJackpotLastmessage: 10,
-      eurojackpotBottomBound: 10,
+      eurojackpotBottomBound: 1,
+      lottoJackpotLastmessage: 99,
     },
     {
       id: 123,
       timestamp: new Date().setMinutes(2),
       lottoJackpotLastmessage: 3,
+    },
+    {
+      id: 123,
+      timestamp: new Date().setMinutes(1),
+      lottoJackpotLastmessage: 1,
     },
     {
       id: 999,
@@ -89,15 +95,15 @@ test("getUsersWhoShouldBeNotified", () => {
   expect(getUsersWhoShouldBeNotified(20, "eurojackpot", data)).toStrictEqual([
     {
       euroJackpotLastmessage: 10,
-      eurojackpotBottomBound: 10,
+      eurojackpotBottomBound: 1,
       id: 123,
       lottoJackpotLastmessage: 3,
       timestamp: 915148920000,
     },
-    { id: 456, timestamp: new Date().getTime() },
+    { id: 456, timestamp: 915148800000 },
     {
       id: 999,
-      timestamp: new Date().getTime(),
+      timestamp: 915148800000,
       euroJackpotLastmessage: 20,
       eurojackpotBottomBound: 10,
     },
