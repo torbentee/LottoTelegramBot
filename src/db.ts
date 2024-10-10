@@ -72,6 +72,7 @@ export function getUsersWhoShouldBeNotified(
   database = db.data.values
 ): Values {
   function filterOfTime(value: ArrayElement<Values>): boolean {
+    console.log("getUsersWhoShouldBeNotified", { jackpot, type, value });
     const chenged = hasJackpotChanged(jackpot, type);
     const notify = hasUserBeenNotifiedOfThisJackpot(jackpot, type, value);
     return chenged || notify;
@@ -86,7 +87,7 @@ export function getUsersWhoShouldBeNotified(
     .filter((value) => {
       const a = map[type];
       if (a === undefined) return true;
-      const b = value[map[type]];
+      const b = value[a];
       if (b === undefined) return true;
       return b <= jackpot;
     })
@@ -126,6 +127,7 @@ function hasUserBeenNotifiedOfThisJackpot(
     eurojackpot: "euroJackpotLastmessage",
     lottojackpot: "lottoJackpotLastmessage",
   } as const;
+  console.log("hasUserBeenNotifiedOfThisJackpot value", value);
   return value[map[type]] !== jackpot;
 }
 
