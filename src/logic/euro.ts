@@ -18,9 +18,12 @@ export async function pollEurojackpot() {
   const response = await fetchEuroJackpot();
   const jackpot = response.jackpotNew;
   if (jackpot === null) {
+    console.warn("No eurojackpot found", response);
     return null;
   }
   const users = getUsersWhoShouldBeNotified(jackpot, "eurojackpot");
+
+  console.log("Found", users);
 
   await Promise.all(
     users.map((user) =>
