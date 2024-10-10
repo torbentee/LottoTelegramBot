@@ -101,6 +101,55 @@ test("getUsersWhoShouldBeNotified", () => {
       timestamp: 915148920000,
     },
     { id: 456, timestamp: 915148800000 },
+  ]);
+  expect(
+    getUsersWhoShouldBeNotified(17, "eurojackpot", [
+      {
+        id: 263700366,
+        timestamp: 1724785080187,
+        start: true,
+        eurojackpotBottomBound: 5,
+        lottojackpotBottomBound: 5,
+        euroJackpotLastmessage: 90,
+        lottoJackpotLastmessage: 24,
+      },
+    ])
+  ).toStrictEqual([
+    {
+      id: 263700366,
+      timestamp: 1724785080187,
+      start: true,
+      eurojackpotBottomBound: 5,
+      lottojackpotBottomBound: 5,
+      euroJackpotLastmessage: 90,
+      lottoJackpotLastmessage: 24,
+    },
+  ]);
+  expect(getUsersWhoShouldBeNotified(9999, "eurojackpot", data)).toStrictEqual([
+    {
+      euroJackpotLastmessage: 10,
+      eurojackpotBottomBound: 1,
+      id: 123,
+      lottoJackpotLastmessage: 3,
+      timestamp: 915148920000,
+    },
+    { id: 456, timestamp: 915148800000 },
+    {
+      id: 999,
+      timestamp: 915148800000,
+      euroJackpotLastmessage: 20,
+      eurojackpotBottomBound: 10,
+    },
+  ]);
+  expect(getUsersWhoShouldBeNotified(11, "eurojackpot", data)).toStrictEqual([
+    {
+      euroJackpotLastmessage: 10,
+      eurojackpotBottomBound: 1,
+      id: 123,
+      lottoJackpotLastmessage: 3,
+      timestamp: 915148920000,
+    },
+    { id: 456, timestamp: 915148800000 },
     {
       id: 999,
       timestamp: 915148800000,
