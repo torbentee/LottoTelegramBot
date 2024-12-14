@@ -9,7 +9,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "cron": "^3.1.7",
+    "cron": "^3.3.1",
     "lowdb": "^7.0.1",
     "telegraf": "^4.16.3"
   }
