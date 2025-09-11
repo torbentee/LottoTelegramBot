@@ -1,0 +1,9 @@
+services:
+  lottobot:
+    image: ghcr.io/torbentee/lottotelegrambot:master
+    restart: unless-stopped
+    volumes:
+      - ./db/:/usr/src/app/db/
+    env_file: .env
+    labels:
+      - traefik.enable=false
